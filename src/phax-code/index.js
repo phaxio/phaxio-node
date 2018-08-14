@@ -7,11 +7,26 @@ module.exports = class {
     this.uri = uri;
   }
 
-  status() {
+  create(options) {
+    return new Promise((resolve, reject) => {
+      request({
+        method: 'POST',
+        uri: `${this.uri}/phax_codes`,
+        auth: {
+          user: this.apiKey,
+          pass: this.apiSecret,
+        },
+        qs: options,
+      }).then(response => resolve(response))
+        .catch(err => reject(err));
+    });
+  }
+
+  get(id = null) {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: `${this.uri}/account/status`,
+        uri: `${this.uri}/phax_codes/${id}`,
         auth: {
           user: this.apiKey,
           pass: this.apiSecret,

@@ -7,15 +7,19 @@ module.exports = class {
     this.uri = uri;
   }
 
-  status() {
+  getAreaCodes(options = {
+    toll_free: false,
+    country_code: 1,
+    country: 'US',
+    state: null,
+    per_page: 1000,
+    page: 1,
+  }) {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: `${this.uri}/account/status`,
-        auth: {
-          user: this.apiKey,
-          pass: this.apiSecret,
-        },
+        uri: `${this.uri}/public/area_codes`,
+        qs: options,
       }).then(response => resolve(response))
         .catch(err => reject(err));
     });

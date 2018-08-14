@@ -15,6 +15,7 @@ describe('class: Phaxio', () => {
       expect(phaxio).to.have.property('apiSecret');
       expect(phaxio).to.have.property('fileDownloadPath');
       expect(phaxio).to.have.property('account');
+      expect(phaxio).to.have.property('phaxCode');
     });
 
     it('should have the appropriate values for properties', () => {

@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 
-const Account = require('../../src/account/index.js');
+const Account = require('../../src/account');
 
 describe('class: Account', () => {
   it('should be a class', () => {
