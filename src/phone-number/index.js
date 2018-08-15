@@ -9,24 +9,6 @@ module.exports = class {
     this.auth = { user: this.apiKey, pass: this.apiSecret };
   }
 
-  getAreaCodes(options = {
-    toll_free: null,
-    country_code: null,
-    country: null,
-    state: null,
-    per_page: null,
-    page: null,
-  }) {
-    return new Promise((resolve, reject) => {
-      request({
-        method: 'GET',
-        uri: `${this.uri}/public/area_codes`,
-        qs: options,
-      }).then(response => resolve(response))
-        .catch(err => reject(err));
-    });
-  }
-
   releaseNumber(number) {
     return new Promise((resolve, reject) => {
       request({

@@ -9,7 +9,7 @@ describe('class: Account', () => {
   });
 
   describe('post-instantiation', () => {
-    const account = new Account('mykey', 'mysecret');
+    const account = new Account('mykey', 'mysecret', 'https://api.phaxio.com/v2.1');
     it('should export appropriate properties and functions', () => {
       expect(account).to.have.property('apiKey');
       expect(account).to.have.property('apiSecret');

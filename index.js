@@ -1,24 +1,20 @@
-const { statSync } = require('fs');
-
+const Faxes = require('./src/faxes');
+const Public = require('./src/public');
 const Account = require('./src/account');
 const PhaxCode = require('./src/phax-code');
 const PhoneNumber = require('./src/phone-number');
-const Faxes = require('./src/faxes');
 
 module.exports = class {
-  constructor(apiKey, apiSecret, fileDownloadPath = './') {
-    // Fails if the download path does not exist.
-    statSync(fileDownloadPath);
-
+  constructor(apiKey, apiSecret) {
     this.apiKey = apiKey;
     this.apiSecret = apiSecret;
-    this.fileDownloadPath = fileDownloadPath;
 
     this.uri = 'https://api.phaxio.com/v2.1';
 
+    this.public = new Public(this.uri);
+    this.faxes = new Faxes(this.apiKey, this.apiSecret, this.uri);
     this.account = new Account(this.apiKey, this.apiSecret, this.uri);
     this.phaxCode = new PhaxCode(this.apiKey, this.apiSecret, this.uri);
     this.phoneNumber = new PhoneNumber(this.apiKey, this.apiSecret, this.uri);
-    this.faxes = new Faxes(this.apiKey, this.apiSecret, this.uri);
   }
 };

@@ -9,19 +9,14 @@ describe('class: PhoneNumber', () => {
   });
 
   describe('post-instantiation', () => {
-    const phoneNumber = new PhoneNumber('mykey', 'mysecret');
+    const phoneNumber = new PhoneNumber('mykey', 'mysecret', 'https://api.phaxio.com/v2.1');
     it('should export appropriate properties and functions', () => {
       expect(phoneNumber).to.have.property('apiKey');
       expect(phoneNumber).to.have.property('apiSecret');
-      expect(phoneNumber).to.have.property('getAreaCodes');
       expect(phoneNumber).to.have.property('releaseNumber');
       expect(phoneNumber).to.have.property('listNumbers');
       expect(phoneNumber).to.have.property('getNumberInfo');
       expect(phoneNumber).to.have.property('provisionNumber');
-    });
-
-    describe('method: getAreaCodes', () => {
-      it('should get a list of area codes based on the filters');
     });
 
     describe('method: releaseNumber', () => {
