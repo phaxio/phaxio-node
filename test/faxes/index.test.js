@@ -9,7 +9,7 @@ describe('class: Faxes', () => {
   });
 
   describe('post-instantiation', () => {
-    const faxes = new Faxes('mykey', 'mysecret', 'https://api.phaxio.com/v2.1');
+    const faxes = new Faxes(process.env.TEST_APIKEY, process.env.TEST_APISECRET, 'https://api.phaxio.com/v2.1');
     it('should export appropriate properties and functions', () => {
       expect(faxes).to.have.property('apiKey');
       expect(faxes).to.have.property('apiSecret');

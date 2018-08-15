@@ -9,7 +9,7 @@ describe('class: PhaxCode', () => {
   });
 
   describe('post-instantiation', () => {
-    const phaxcode = new PhaxCode('mykey', 'mysecret', 'https://api.phaxio.com/v2.1');
+    const phaxcode = new PhaxCode(process.env.TEST_APIKEY, process.env.TEST_APISECRET, 'https://api.phaxio.com/v2.1');
     it('should export appropriate properties and functions', () => {
       expect(phaxcode).to.have.property('apiKey');
       expect(phaxcode).to.have.property('apiSecret');

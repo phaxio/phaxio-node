@@ -9,7 +9,7 @@ describe('class: Phaxio', () => {
   });
 
   describe('post-instantiation', () => {
-    const phaxio = new Phaxio('mykey', 'mysecret');
+    const phaxio = new Phaxio(process.env.TEST_APIKEY, process.env.TEST_APISECRET);
     it('should export appropriate properties and functions', () => {
       expect(phaxio).to.have.property('apiKey');
       expect(phaxio).to.have.property('apiSecret');

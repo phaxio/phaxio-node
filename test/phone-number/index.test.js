@@ -9,7 +9,7 @@ describe('class: PhoneNumber', () => {
   });
 
   describe('post-instantiation', () => {
-    const phoneNumber = new PhoneNumber('mykey', 'mysecret', 'https://api.phaxio.com/v2.1');
+    const phoneNumber = new PhoneNumber(process.env.TEST_APIKEY, process.env.TEST_APISECRET, 'https://api.phaxio.com/v2.1');
     it('should export appropriate properties and functions', () => {
       expect(phoneNumber).to.have.property('apiKey');
       expect(phoneNumber).to.have.property('apiSecret');
