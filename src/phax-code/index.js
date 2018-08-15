@@ -5,6 +5,8 @@ module.exports = class {
     this.apiKey = apiKey;
     this.apiSecret = apiSecret;
     this.uri = uri;
+
+    this.auth = { user: this.apiKey, pass: this.apiSecret };
   }
 
   create(options) {
@@ -12,11 +14,8 @@ module.exports = class {
       request({
         method: 'POST',
         uri: `${this.uri}/phax_codes`,
-        auth: {
-          user: this.apiKey,
-          pass: this.apiSecret,
-        },
-        qs: options,
+        auth: this.auth,
+        formData: options,
       }).then(response => resolve(response))
         .catch(err => reject(err));
     });
@@ -27,10 +26,7 @@ module.exports = class {
       request({
         method: 'GET',
         uri: `${this.uri}/phax_codes/${id}`,
-        auth: {
-          user: this.apiKey,
-          pass: this.apiSecret,
-        },
+        auth: this.auth,
       }).then(response => resolve(response))
         .catch(err => reject(err));
     });

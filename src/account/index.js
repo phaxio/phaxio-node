@@ -5,6 +5,8 @@ module.exports = class {
     this.apiKey = apiKey;
     this.apiSecret = apiSecret;
     this.uri = uri;
+
+    this.auth = { user: this.apiKey, pass: this.apiSecret };
   }
 
   status() {
@@ -12,10 +14,7 @@ module.exports = class {
       request({
         method: 'GET',
         uri: `${this.uri}/account/status`,
-        auth: {
-          user: this.apiKey,
-          pass: this.apiSecret,
-        },
+        auth: this.auth,
       }).then(response => resolve(response))
         .catch(err => reject(err));
     });
