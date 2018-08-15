@@ -15,7 +15,7 @@ module.exports = class {
         method: 'GET',
         url: `${this.url}/account/status`,
         auth: this.auth,
-      }).then(response => resolve(response))
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
