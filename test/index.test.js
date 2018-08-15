@@ -1,5 +1,12 @@
 const expect = require('expect.js');
 
+const { config } = require('dotenv');
+
+before(() => {
+  const result = config();
+  if (result.error) throw result.error;
+});
+
 const Phaxio = require('../index.js');
 
 describe('class: Phaxio', () => {
@@ -9,7 +16,11 @@ describe('class: Phaxio', () => {
   });
 
   describe('post-instantiation', () => {
-    const phaxio = new Phaxio(process.env.TEST_APIKEY, process.env.TEST_APISECRET);
+    let phaxio;
+    before(() => {
+      phaxio = new Phaxio(process.env.TEST_APIKEY, process.env.TEST_APISECRET);
+    });
+
     it('should export appropriate properties and functions', () => {
       expect(phaxio).to.have.property('apiKey');
       expect(phaxio).to.have.property('apiSecret');
@@ -22,8 +33,8 @@ describe('class: Phaxio', () => {
     });
 
     it('should have the appropriate values for properties', () => {
-      expect(phaxio.apiKey).to.be('mykey');
-      expect(phaxio.apiSecret).to.be('mysecret');
+      expect(phaxio.apiKey).to.be(process.env.TEST_APIKEY);
+      expect(phaxio.apiSecret).to.be(process.env.TEST_APISECRET);
     });
   });
 });
