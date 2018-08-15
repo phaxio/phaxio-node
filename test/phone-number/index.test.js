@@ -14,6 +14,30 @@ describe('class: PhoneNumber', () => {
       expect(phoneNumber).to.have.property('apiKey');
       expect(phoneNumber).to.have.property('apiSecret');
       expect(phoneNumber).to.have.property('getAreaCodes');
+      expect(phoneNumber).to.have.property('releaseNumber');
+      expect(phoneNumber).to.have.property('listNumbers');
+      expect(phoneNumber).to.have.property('getNumberInfo');
+      expect(phoneNumber).to.have.property('provisionNumber');
+    });
+
+    describe('method: getAreaCodes', () => {
+      it('should get a list of area codes based on the filters');
+    });
+
+    describe('method: releaseNumber', () => {
+      it('should get a message indicating that it successfully released the number');
+    });
+
+    describe('method: listNumbers', () => {
+      it('should get a list of numbers you have registered based on the set filters');
+    });
+
+    describe('method: getNumberInfo', () => {
+      it('should get information about the number requested');
+    });
+
+    describe('method: provisionNumber', () => {
+      it('should successfully provision a number with the requeted parameters');
     });
   });
 });
