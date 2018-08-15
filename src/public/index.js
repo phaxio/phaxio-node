@@ -15,11 +15,20 @@ module.exports = class {
     page: null,
   }) {
     return new Promise((resolve, reject) => {
-      request({
+      const qs = {};
+      Object.keys(options).forEach((rec) => {
+        if (options[rec] !== null) qs[rec] = options[rec];
+      });
+
+      const req = {
         method: 'GET',
         url: `${this.url}/public/area_codes`,
-        qs: options,
-      }).then(response => resolve(response))
+      };
+
+      if (qs.length !== 0) req.qs = qs;
+
+      request(req)
+        .then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
@@ -33,7 +42,7 @@ module.exports = class {
         method: 'GET',
         url: `${this.url}/public/countries`,
         qs: options,
-      }).then(response => resolve(response))
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
