@@ -3,10 +3,10 @@
 const request = require('request-promise-native');
 
 module.exports = class {
-  constructor(apiKey, apiSecret, uri) {
+  constructor(apiKey, apiSecret, url) {
     this.apiKey = apiKey;
     this.apiSecret = apiSecret;
-    this.uri = uri;
+    this.url = url;
 
     this.auth = { user: this.apiKey, pass: this.apiSecret };
   }
@@ -27,7 +27,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'POST',
-        uri: `${this.uri}/faxes`,
+        url: `${this.url}/faxes`,
         auth: this.auth,
         formData: options,
       }).then(response => resolve(response))
@@ -39,7 +39,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'POST',
-        uri: `${this.uri}/faxes/${id}/cancel`,
+        url: `${this.url}/faxes/${id}/cancel`,
         auth: this.auth,
       }).then(response => resolve(response))
         .catch(err => reject(err));
@@ -51,7 +51,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'POST',
-        uri: `${this.uri}/faxes/${id}/resend`,
+        url: `${this.url}/faxes/${id}/resend`,
         auth: this.auth,
         formData: { callback_url },
       }).then(response => resolve(response))
@@ -68,7 +68,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'POST',
-        uri: `${this.uri}/faxes`,
+        url: `${this.url}/faxes`,
         auth: this.auth,
         formData: options,
       }).then(response => resolve(response))
@@ -80,7 +80,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'DELETE',
-        uri: `${this.uri}/faxes/${id}`,
+        url: `${this.url}/faxes/${id}`,
         auth: this.auth,
       }).then(response => resolve(response))
         .catch(err => reject(err));
@@ -91,7 +91,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: `${this.uri}/faxes/${id}`,
+        url: `${this.url}/faxes/${id}`,
         auth: this.auth,
       }).then(response => resolve(response))
         .catch(err => reject(err));
@@ -103,7 +103,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: `${this.uri}/faxes/${id}/file`,
+        url: `${this.url}/faxes/${id}/file`,
         auth: this.auth,
         qs: { thumbnail },
       }).then(response => resolve(response))
@@ -115,7 +115,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'DELETE',
-        uri: `${this.uri}/faxes/${id}/file`,
+        url: `${this.url}/faxes/${id}/file`,
         auth: this.auth,
       }).then(response => resolve(response))
         .catch(err => reject(err));
@@ -135,7 +135,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: `${this.uri}/faxes`,
+        url: `${this.url}/faxes`,
         auth: this.auth,
         qs: options,
       }).then(response => resolve(response))

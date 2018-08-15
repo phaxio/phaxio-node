@@ -13,7 +13,7 @@ describe('class: Faxes', () => {
     it('should export appropriate properties and functions', () => {
       expect(faxes).to.have.property('apiKey');
       expect(faxes).to.have.property('apiSecret');
-      expect(faxes).to.have.property('uri');
+      expect(faxes).to.have.property('url');
       expect(faxes).to.have.property('auth');
       expect(faxes).to.have.property('create');
       expect(faxes).to.have.property('cancel');

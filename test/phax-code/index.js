@@ -13,16 +13,9 @@ describe('class: PhaxCode', () => {
     it('should export appropriate properties and functions', () => {
       expect(phaxcode).to.have.property('apiKey');
       expect(phaxcode).to.have.property('apiSecret');
+      expect(phaxcode).to.have.property('url');
       expect(phaxcode).to.have.property('create');
       expect(phaxcode).to.have.property('get');
-    });
-
-    it('should have a method `create()`', () => {
-      expect(phaxcode.create).to.be.a('function');
-    });
-
-    it('should have a method `get()`', () => {
-      expect(phaxcode.get).to.be.a('function');
     });
 
     describe('method: create', () => {

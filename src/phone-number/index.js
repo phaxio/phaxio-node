@@ -1,10 +1,10 @@
 const request = require('request-promise-native');
 
 module.exports = class {
-  constructor(apiKey, apiSecret, uri) {
+  constructor(apiKey, apiSecret, url) {
     this.apiKey = apiKey;
     this.apiSecret = apiSecret;
-    this.uri = uri;
+    this.url = url;
 
     this.auth = { user: this.apiKey, pass: this.apiSecret };
   }
@@ -13,7 +13,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'DELETE',
-        uri: `${this.uri}/phone_numbers/${number}`,
+        url: `${this.url}/phone_numbers/${number}`,
         auth: this.auth,
       }).then(response => resolve(response))
         .catch(err => reject(err));
@@ -24,7 +24,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: `${this.uri}/phone_numbers`,
+        url: `${this.url}/phone_numbers`,
         qs: options,
         auth: this.auth,
       }).then(response => resolve(response))
@@ -36,7 +36,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: `${this.uri}/phone_numbers/${number}`,
+        url: `${this.url}/phone_numbers/${number}`,
         auth: this.auth,
       }).then(response => resolve(response))
         .catch(err => reject(err));
@@ -47,7 +47,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'POST',
-        uri: `${this.uri}/phone_numbers`,
+        url: `${this.url}/phone_numbers`,
         formData: options,
         auth: this.auth,
       }).then(response => resolve(response))

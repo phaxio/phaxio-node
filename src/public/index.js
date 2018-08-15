@@ -1,8 +1,8 @@
 const request = require('request-promise-native');
 
 module.exports = class {
-  constructor(uri) {
-    this.uri = uri;
+  constructor(url) {
+    this.url = url;
   }
 
 
@@ -17,7 +17,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: `${this.uri}/public/area_codes`,
+        url: `${this.url}/public/area_codes`,
         qs: options,
       }).then(response => resolve(response))
         .catch(err => reject(err));
@@ -31,7 +31,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: `${this.uri}/public/countries`,
+        url: `${this.url}/public/countries`,
         qs: options,
       }).then(response => resolve(response))
         .catch(err => reject(err));

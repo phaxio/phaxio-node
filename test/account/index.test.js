@@ -13,11 +13,8 @@ describe('class: Account', () => {
     it('should export appropriate properties and functions', () => {
       expect(account).to.have.property('apiKey');
       expect(account).to.have.property('apiSecret');
+      expect(account).to.have.property('url');
       expect(account).to.have.property('status');
-    });
-
-    it('should have a method `status()`', () => {
-      expect(account.status).to.be.a('function');
     });
 
     describe('method: status', () => {

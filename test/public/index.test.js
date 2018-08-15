@@ -12,6 +12,7 @@ describe('class: Public', () => {
     // `public` by itself is reserved in JavaScript.
     const pub = new Public('https://api.phaxio.com/v2.1');
     it('should export appropriate properties and functions', () => {
+      expect(pub).to.have.property('url');
       expect(pub).to.have.property('getAreaCodes');
       expect(pub).to.have.property('getCountries');
     });

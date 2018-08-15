@@ -13,15 +13,17 @@ describe('class: Phaxio', () => {
     it('should export appropriate properties and functions', () => {
       expect(phaxio).to.have.property('apiKey');
       expect(phaxio).to.have.property('apiSecret');
-      expect(phaxio).to.have.property('fileDownloadPath');
+      expect(phaxio).to.have.property('url');
+      expect(phaxio).to.have.property('faxes');
+      expect(phaxio).to.have.property('public');
       expect(phaxio).to.have.property('account');
       expect(phaxio).to.have.property('phaxCode');
+      expect(phaxio).to.have.property('phoneNumber');
     });
 
     it('should have the appropriate values for properties', () => {
       expect(phaxio.apiKey).to.be('mykey');
       expect(phaxio.apiSecret).to.be('mysecret');
-      expect(phaxio.fileDownloadPath).to.be('./');
     });
   });
 });

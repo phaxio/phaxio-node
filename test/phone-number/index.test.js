@@ -13,6 +13,7 @@ describe('class: PhoneNumber', () => {
     it('should export appropriate properties and functions', () => {
       expect(phoneNumber).to.have.property('apiKey');
       expect(phoneNumber).to.have.property('apiSecret');
+      expect(phoneNumber).to.have.property('url');
       expect(phoneNumber).to.have.property('releaseNumber');
       expect(phoneNumber).to.have.property('listNumbers');
       expect(phoneNumber).to.have.property('getNumberInfo');
