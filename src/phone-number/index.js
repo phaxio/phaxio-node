@@ -15,19 +15,28 @@ module.exports = class {
         method: 'DELETE',
         url: `${this.url}/phone_numbers/${number}`,
         auth: this.auth,
-      }).then(response => resolve(response))
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
 
   listNumbers(options = { country_code: null, area_code: null }) {
     return new Promise((resolve, reject) => {
-      request({
+      const query = {};
+      Object.keys(options).forEach((rec) => {
+        if (options[rec] !== null) query[rec] = options[rec];
+      });
+
+      const req = {
         method: 'GET',
         url: `${this.url}/phone_numbers`,
-        qs: options,
         auth: this.auth,
-      }).then(response => resolve(response))
+      };
+
+      if (query.length !== 0) req.qs = query;
+
+      request(req)
+        .then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
@@ -38,19 +47,28 @@ module.exports = class {
         method: 'GET',
         url: `${this.url}/phone_numbers/${number}`,
         auth: this.auth,
-      }).then(response => resolve(response))
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
 
   provisionNumber(options = { country_code: null, area_code: null, callback_url: null }) {
     return new Promise((resolve, reject) => {
-      request({
+      const formData = {};
+      Object.keys(options).forEach((rec) => {
+        if (options[rec] !== null) formData[rec] = options[rec];
+      });
+
+      const req = {
         method: 'POST',
         url: `${this.url}/phone_numbers`,
-        formData: options,
         auth: this.auth,
-      }).then(response => resolve(response))
+      };
+
+      if (formData.length !== 0) req.formData = formData;
+
+      request(req)
+        .then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
