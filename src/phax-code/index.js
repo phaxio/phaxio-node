@@ -9,25 +9,46 @@ module.exports = class {
     this.auth = { user: this.apiKey, pass: this.apiSecret };
   }
 
-  create(options) {
+  create(options = { metadata: null, type: null }) {
     return new Promise((resolve, reject) => {
-      request({
+      const formData = {};
+      Object.keys(options).forEach((rec) => {
+        if (options[rec] !== null) formData[rec] = options[rec];
+      });
+
+      const req = {
         method: 'POST',
         url: `${this.url}/phax_codes`,
         auth: this.auth,
-        formData: options,
-      }).then(response => resolve(response))
+      };
+
+      if (formData.length !== 0) req.formData = formData;
+
+      request(req)
+        .then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
 
-  get(id = null) {
+  get(options = { id: null, type: null }) {
     return new Promise((resolve, reject) => {
-      request({
+      let phaxCode;
+      if (options.id === null) {
+        phaxCode = 'phax_code';
+      } else {
+        phaxCode = `phax_codes/${options.id}`;
+      }
+
+      const req = {
         method: 'GET',
-        url: `${this.url}/phax_codes/${id}`,
+        url: `${this.url}/${phaxCode}`,
         auth: this.auth,
-      }).then(response => resolve(response))
+      };
+
+      if (options.type !== null) req.type = options.type;
+
+      request(req)
+        .then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
