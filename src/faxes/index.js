@@ -1,5 +1,5 @@
 /* eslint camelcase: "off" */
-
+const fs = require('fs');
 const request = require('request-promise-native');
 
 module.exports = class {
@@ -16,6 +16,7 @@ module.exports = class {
     file: null,
     content_url: null,
     header_text: null,
+    batch: null,
     batch_delay: null,
     batch_collision_avoidance: null,
     callback_url: null,
@@ -25,13 +26,37 @@ module.exports = class {
     test_fail: null,
   }) {
     return new Promise((resolve, reject) => {
-      request({
+      const formData = {};
+      Object.keys(options).forEach((rec) => {
+        if (options[rec] !== null) formData[rec] = options[rec];
+        if (typeof formData[rec] === 'boolean') formData[rec] = formData[rec].toString();
+      });
+
+      const req = {
         method: 'POST',
         url: `${this.url}/faxes`,
         auth: this.auth,
-        formData: options,
-      }).then(response => resolve(response))
-        .catch(err => reject(err));
+      };
+
+      const r = request(req);
+      const form = r.form();
+      Object.keys(formData).forEach((key) => {
+        if (Array.isArray(formData[key]) && key === 'file') {
+          formData[key].forEach((val) => {
+            form.append(`${key}[]`, fs.createReadStream(val));
+          });
+        } else if (Array.isArray(formData[key])) {
+          formData[key].forEach((val) => {
+            form.append(`${key}[]`, val);
+          });
+        } else if (key === 'file') {
+          form.append(key, fs.createReadStream(formData[key]));
+        } else {
+          form.append(key, formData[key]);
+        }
+      });
+
+      r.then(response => resolve(JSON.parse(response))).catch(err => reject(err));
     });
   }
 
@@ -41,37 +66,52 @@ module.exports = class {
         method: 'POST',
         url: `${this.url}/faxes/${id}/cancel`,
         auth: this.auth,
-      }).then(response => resolve(response))
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
 
   resend(options = { id: null, callback_url: null }) {
-    const { id, callback_url } = options;
     return new Promise((resolve, reject) => {
-      request({
+      const { id, callback_url } = options;
+
+      const req = {
         method: 'POST',
         url: `${this.url}/faxes/${id}/resend`,
         auth: this.auth,
-        formData: { callback_url },
-      }).then(response => resolve(response))
+        callback_url,
+      };
+
+      if (req.callback_url === null || req.callback_url === undefined) delete req.callback_url;
+
+      request(req)
+        .then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
 
   testReceive(options = {
-    direction: null,
     file: null,
     from_number: null,
     to_number: null,
   }) {
     return new Promise((resolve, reject) => {
+      const formData = { direction: 'received' };
+
+      Object.keys(options).forEach((rec) => {
+        if (rec === 'file' && options[rec] !== null) {
+          formData[rec] = fs.createReadStream(options[rec]);
+        } else if (options[rec] !== null) {
+          formData[rec] = options[rec];
+        }
+      });
+
       request({
         method: 'POST',
         url: `${this.url}/faxes`,
         auth: this.auth,
-        formData: options,
-      }).then(response => resolve(response))
+        formData,
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
@@ -82,7 +122,7 @@ module.exports = class {
         method: 'DELETE',
         url: `${this.url}/faxes/${id}`,
         auth: this.auth,
-      }).then(response => resolve(response))
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
@@ -93,20 +133,26 @@ module.exports = class {
         method: 'GET',
         url: `${this.url}/faxes/${id}`,
         auth: this.auth,
-      }).then(response => resolve(response))
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
 
   getFile(options = { id: null, thumbnail: null }) {
-    const { id, thumbnail } = options;
     return new Promise((resolve, reject) => {
-      request({
+      const { id, thumbnail } = options;
+
+      const req = {
         method: 'GET',
         url: `${this.url}/faxes/${id}/file`,
         auth: this.auth,
         qs: { thumbnail },
-      }).then(response => resolve(response))
+      };
+
+      if (req.qs.thumbnail === undefined) delete req.qs;
+
+      request(req)
+        .then(response => resolve(response))
         .catch(err => reject(err));
     });
   }
@@ -117,7 +163,7 @@ module.exports = class {
         method: 'DELETE',
         url: `${this.url}/faxes/${id}/file`,
         auth: this.auth,
-      }).then(response => resolve(response))
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
@@ -133,12 +179,17 @@ module.exports = class {
     page: null,
   }) {
     return new Promise((resolve, reject) => {
+      const query = {};
+      Object.keys(options).forEach((rec) => {
+        if (options[rec] !== null) query[rec] = options[rec];
+      });
+
       request({
         method: 'GET',
         url: `${this.url}/faxes`,
         auth: this.auth,
-        qs: options,
-      }).then(response => resolve(response))
+        qs: query,
+      }).then(response => resolve(JSON.parse(response)))
         .catch(err => reject(err));
     });
   }
