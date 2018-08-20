@@ -15,7 +15,12 @@ module.exports = class {
         method: 'DELETE',
         url: `${this.url}/phone_numbers/${number}`,
         auth: this.auth,
-      }).then(response => resolve(JSON.parse(response)))
+      })
+        .then((response) => {
+          const res = JSON.parse(response);
+          if (!res.success) return reject(res);
+          return resolve(res);
+        })
         .catch(err => reject(err));
     });
   }
@@ -36,7 +41,11 @@ module.exports = class {
       if (query.length !== 0) req.qs = query;
 
       request(req)
-        .then(response => resolve(JSON.parse(response)))
+        .then((response) => {
+          const res = JSON.parse(response);
+          if (!res.success) return reject(res);
+          return resolve(res);
+        })
         .catch(err => reject(err));
     });
   }
@@ -47,7 +56,12 @@ module.exports = class {
         method: 'GET',
         url: `${this.url}/phone_numbers/${number}`,
         auth: this.auth,
-      }).then(response => resolve(JSON.parse(response)))
+      })
+        .then((response) => {
+          const res = JSON.parse(response);
+          if (!res.success) return reject(res);
+          return resolve(res);
+        })
         .catch(err => reject(err));
     });
   }
@@ -68,7 +82,11 @@ module.exports = class {
       if (formData.length !== 0) req.formData = formData;
 
       request(req)
-        .then(response => resolve(JSON.parse(response)))
+        .then((response) => {
+          const res = JSON.parse(response);
+          if (!res.success) return reject(res);
+          return resolve(res);
+        })
         .catch(err => reject(err));
     });
   }

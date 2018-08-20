@@ -28,7 +28,11 @@ module.exports = class {
       if (qs.length !== 0) req.qs = qs;
 
       request(req)
-        .then(response => resolve(JSON.parse(response)))
+        .then((response) => {
+          const res = JSON.parse(response);
+          if (!res.success) return reject(res);
+          return resolve(res);
+        })
         .catch(err => reject(err));
     });
   }
@@ -42,7 +46,12 @@ module.exports = class {
         method: 'GET',
         url: `${this.url}/public/countries`,
         qs: options,
-      }).then(response => resolve(JSON.parse(response)))
+      })
+        .then((response) => {
+          const res = JSON.parse(response);
+          if (!res.success) return reject(res);
+          return resolve(res);
+        })
         .catch(err => reject(err));
     });
   }

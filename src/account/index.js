@@ -15,7 +15,12 @@ module.exports = class {
         method: 'GET',
         url: `${this.url}/account/status`,
         auth: this.auth,
-      }).then(response => resolve(JSON.parse(response)))
+      })
+        .then((response) => {
+          const res = JSON.parse(response);
+          if (!res.success) return reject(res);
+          return resolve(res);
+        })
         .catch(err => reject(err));
     });
   }
