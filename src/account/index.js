@@ -1,4 +1,5 @@
 const request = require('request-promise-native');
+const errorHandler = require('../error-handler');
 
 module.exports = class {
   constructor(apiKey, apiSecret, url) {
@@ -18,7 +19,7 @@ module.exports = class {
       })
         .then((response) => {
           const res = JSON.parse(response);
-          if (!res.success) return reject(res);
+          if (!res.success) return reject(errorHandler(res.message));
           return resolve(res);
         })
         .catch(err => reject(err));
