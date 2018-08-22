@@ -1,4 +1,4 @@
-/* eslint arrow-body-style: "off" */
+/* eslint arrow-body-style: "off" , max-len: "off" */
 const expect = require('expect.js');
 
 const Faxes = require('../../src/faxes');
@@ -11,7 +11,6 @@ describe('class: Faxes', () => {
 
   describe('post-instantiation', () => {
     let faxes;
-    let firstFax;
 
     before(() => {
       faxes = new Faxes(process.env.TEST_APIKEY, process.env.TEST_APISECRET, 'https://api.phaxio.com/v2.1');
@@ -46,16 +45,29 @@ describe('class: Faxes', () => {
       // caller_id: null,
       // test_fail: null,
 
-      it('should send a single `content_url`', () => {
+      it('should send a single `content_url` and return a Fax object', () => {
         return faxes.create({
           to: process.env.PHONE_NUMBER,
           content_url: 'https://google.com',
         })
-          .then((response) => {
-            firstFax = response.data.id;
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Fax queued for sending');
-            expect(response.data.id).to.be.a('number');
+          .then((fax) => {
+            expect(fax).to.have.property('apiKey');
+            expect(fax).to.have.property('apiSecret');
+            expect(fax).to.have.property('url');
+            expect(fax).to.have.property('auth');
+            expect(fax).to.have.property('id');
+            expect(fax).to.have.property('success');
+            expect(fax).to.have.property('message');
+            expect(fax).to.have.property('cancel');
+            expect(fax).to.have.property('resend');
+            expect(fax).to.have.property('getInfo');
+            expect(fax).to.have.property('getFile');
+            expect(fax).to.have.property('deleteFile');
+            expect(fax).to.have.property('testDelete');
+
+            expect(fax.success).to.be.ok();
+            expect(fax.id).to.be.a('number');
+            expect(fax.message).to.be('Fax queued for sending');
           })
           .catch((err) => { throw err; });
       });
@@ -65,10 +77,10 @@ describe('class: Faxes', () => {
           to: process.env.PHONE_NUMBER,
           content_url: ['https://google.com', 'https://wikipedia.org'],
         })
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Fax queued for sending');
-            expect(response.data.id).to.be.a('number');
+          .then((fax) => {
+            expect(fax.success).to.be.ok();
+            expect(fax.message).to.be('Fax queued for sending');
+            expect(fax.id).to.be.a('number');
           })
           .catch((err) => { throw err; });
       });
@@ -78,10 +90,10 @@ describe('class: Faxes', () => {
           to: process.env.PHONE_NUMBER,
           file: `${__dirname}/sample1.pdf`,
         })
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Fax queued for sending');
-            expect(response.data.id).to.be.a('number');
+          .then((fax) => {
+            expect(fax.success).to.be.ok();
+            expect(fax.message).to.be('Fax queued for sending');
+            expect(fax.id).to.be.a('number');
           })
           .catch((err) => { throw err; });
       });
@@ -91,10 +103,10 @@ describe('class: Faxes', () => {
           to: process.env.PHONE_NUMBER,
           file: [`${__dirname}/sample1.pdf`, `${__dirname}/sample2.pdf`],
         })
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Fax queued for sending');
-            expect(response.data.id).to.be.a('number');
+          .then((fax) => {
+            expect(fax.success).to.be.ok();
+            expect(fax.message).to.be('Fax queued for sending');
+            expect(fax.id).to.be.a('number');
           })
           .catch((err) => { throw err; });
       });
@@ -105,10 +117,10 @@ describe('class: Faxes', () => {
           content_url: 'https://google.com',
           file: [`${__dirname}/sample1.pdf`, `${__dirname}/sample2.pdf`],
         })
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Fax queued for sending');
-            expect(response.data.id).to.be.a('number');
+          .then((fax) => {
+            expect(fax.success).to.be.ok();
+            expect(fax.message).to.be('Fax queued for sending');
+            expect(fax.id).to.be.a('number');
           })
           .catch((err) => { throw err; });
       });
@@ -119,10 +131,10 @@ describe('class: Faxes', () => {
           content_url: ['https://google.com', 'https://wikipedia.org'],
           file: `${__dirname}/sample1.pdf`,
         })
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Fax queued for sending');
-            expect(response.data.id).to.be.a('number');
+          .then((fax) => {
+            expect(fax.success).to.be.ok();
+            expect(fax.message).to.be('Fax queued for sending');
+            expect(fax.id).to.be.a('number');
           })
           .catch((err) => { throw err; });
       });
@@ -133,10 +145,10 @@ describe('class: Faxes', () => {
           content_url: ['https://google.com', 'https://wikipedia.org'],
           file: [`${__dirname}/sample1.pdf`, `${__dirname}/sample2.pdf`],
         })
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Fax queued for sending');
-            expect(response.data.id).to.be.a('number');
+          .then((fax) => {
+            expect(fax.success).to.be.ok();
+            expect(fax.message).to.be('Fax queued for sending');
+            expect(fax.id).to.be.a('number');
           })
           .catch((err) => { throw err; });
       });
@@ -150,60 +162,16 @@ describe('class: Faxes', () => {
           batch: true,
           batch_delay: 2,
         })
-          .then((fResponse) => {
+          .then((leadFax) => {
             return faxes.create({
               to: process.env.PHONE_NUMBER,
               content_url: 'https://wikipedia.org',
             })
-              .then((response) => {
-                expect(fResponse.success).to.be.ok();
-                expect(response.success).to.be.ok();
+              .then((fax) => {
+                expect(leadFax.success).to.be.ok();
+                expect(fax.success).to.be.ok();
               })
               .catch((err) => { throw err; });
-          })
-          .catch((err) => { throw err; });
-      });
-    });
-
-    describe('method: cancel', () => {
-      it('should cancel the requested fax', () => {
-        return faxes.create({
-          to: process.env.PHONE_NUMBER,
-          content_url: 'https://google.com',
-        })
-          .then((created) => {
-            return faxes.cancel(created.data.id)
-              .then((response) => {
-                expect(response.success).to.be.ok();
-                expect(response.message).to.be('Fax cancellation scheduled successfully.');
-                expect(response.data.id).to.be.a('number');
-              })
-              .catch((err) => { throw err; });
-          })
-          .catch((err) => { throw err; });
-      });
-    });
-
-    describe('method: getInfo', () => {
-      it('should get the info for a specific fax', () => {
-        return faxes.getInfo(firstFax)
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Metadata for fax');
-            expect(response.data.id).to.be(firstFax);
-          })
-          .catch((err) => { throw err; });
-      });
-    });
-
-    describe('method: resend', () => {
-      it('should resend a fax', () => {
-        return faxes.resend({ id: firstFax })
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Fax queued for resending');
-            expect(response.data.id).to.be.a('number');
-            expect(response.data.id).to.not.be(firstFax);
           })
           .catch((err) => { throw err; });
       });
@@ -221,33 +189,6 @@ describe('class: Faxes', () => {
       });
     });
 
-
-    describe('method: getFile', () => {
-      it('should get a small jpg thumbnail of the file', () => {
-        return faxes.getFile({ id: firstFax, thumbnail: 's' })
-          .then((response) => {
-            expect(response).to.be.a('string');
-          })
-          .catch((err) => { throw err; });
-      });
-
-      it('should get a large jpg thumbnail of the file', () => {
-        return faxes.getFile({ id: firstFax, thumbnail: 'l' })
-          .then((response) => {
-            expect(response).to.be.a('string');
-          })
-          .catch((err) => { throw err; });
-      });
-
-      it('should get the whole file', () => {
-        return faxes.getFile({ id: firstFax })
-          .then((response) => {
-            expect(response).to.be.a('string');
-          })
-          .catch((err) => { throw err; });
-      });
-    });
-
     describe('method: listFaxes', () => {
       it('should get a list of faxes based on filters', () => {
         return faxes.listFaxes()
@@ -260,23 +201,69 @@ describe('class: Faxes', () => {
       });
     });
 
-    describe('method: deleteFile', () => {
-      it('should delete files from Phaxio for the specified fax', () => {
-        return faxes.deleteFile(firstFax)
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Deleted files successfully!');
+    describe('using Fax object', function () { // eslint-disable-line func-names
+      this.timeout(6000);
+      let faxObject;
+      before((done) => {
+        faxes.create({
+          to: process.env.PHONE_NUMBER,
+          content_url: 'https://google.com',
+        })
+          .then((fo) => {
+            faxObject = fo;
+          })
+          .catch((err) => { throw err; });
+        setTimeout(done, 4000);
+      });
+
+      it('should cancel', () => {
+        return faxes.create({
+          to: process.env.PHONE_NUMBER,
+          content_url: 'https://google.com',
+        })
+          .then(async (fax) => {
+            const canc = await fax.cancel();
+            expect(canc.success).to.be.ok();
           })
           .catch((err) => { throw err; });
       });
-    });
 
-    describe('method: testDelete', () => {
+      it('should resend', () => {
+        return faxObject.resend()
+          .then((res) => {
+            expect(res.success).to.be.ok();
+          })
+          .catch((err) => { throw err; });
+      });
+
+      it('should fetch new metadata', () => {
+        return faxObject.getInfo()
+          .then((md) => {
+            expect(md.success).to.be.ok();
+          })
+          .catch((err) => { throw err; });
+      });
+
+      it('should fetch the fax\'s file', () => {
+        return faxObject.getFile()
+          .then((file) => {
+            expect(file).to.be.a('string');
+          })
+          .catch((err) => { throw err; });
+      });
+
+      it('should delete the fax\'s file', () => {
+        return faxObject.deleteFile()
+          .then((dfile) => {
+            expect(dfile.success).to.be.ok();
+          })
+          .catch((err) => { throw err; });
+      });
+
       it('should delete a test fax', () => {
-        return faxes.testDelete(firstFax)
-          .then((response) => {
-            expect(response.success).to.be.ok();
-            expect(response.message).to.be('Deleted fax successfully!');
+        return faxObject.testDelete()
+          .then((dfax) => {
+            expect(dfax.success).to.be.ok();
           })
           .catch((err) => { throw err; });
       });

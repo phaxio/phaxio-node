@@ -12,6 +12,11 @@ describe('class: PhaxCode', () => {
   describe('post-instantiation', () => {
     let phaxcode;
     let id;
+
+    beforeEach((done) => {
+      setTimeout(done, 1000);
+    });
+
     before(() => {
       phaxcode = new PhaxCode(process.env.TEST_APIKEY, process.env.TEST_APISECRET, 'https://api.phaxio.com/v2.1');
     });
@@ -49,6 +54,10 @@ describe('class: PhaxCode', () => {
     });
 
     describe('method: get', () => {
+      beforeEach((done) => {
+        setTimeout(done, 1500);
+      });
+
       it('should get the default PhaxCode if called without an ID', () => {
         return phaxcode.get()
           .then((response) => {

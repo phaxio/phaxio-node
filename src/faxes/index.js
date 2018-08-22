@@ -1,7 +1,16 @@
-/* eslint camelcase: "off" */
 const fs = require('fs');
 const request = require('request-promise-native');
 const errorHandler = require('../error-handler');
+
+const Fax = require('./fax');
+const {
+  cancel,
+  resend,
+  testDelete,
+  getInfo,
+  getFile,
+  deleteFile,
+} = require('./shared-methods');
 
 module.exports = class {
   constructor(apiKey, apiSecret, url) {
@@ -10,6 +19,36 @@ module.exports = class {
     this.url = url;
 
     this.auth = { user: this.apiKey, pass: this.apiSecret };
+  }
+
+  async cancel(id) {
+    const canc = await cancel(this.url, id, this.auth);
+    return canc;
+  }
+
+  async resend(options = { id: null, callback_url: null }) {
+    const res = await resend(this.url, options.id, this.auth, options);
+    return res;
+  }
+
+  async testDelete(id) {
+    const td = await testDelete(this.url, id, this.auth);
+    return td;
+  }
+
+  async getInfo(id) {
+    const gi = await getInfo(this.url, id, this.auth);
+    return gi;
+  }
+
+  async getFile(options = { id: null, callback_url: null }) {
+    const gf = await getFile(this.url, options.id, this.auth, options);
+    return gf;
+  }
+
+  async deleteFile(id) {
+    const df = await deleteFile(this.url, id, this.auth);
+    return df;
   }
 
   create(options = {
@@ -61,46 +100,8 @@ module.exports = class {
         .then((response) => {
           const res = JSON.parse(response);
           if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch(err => reject(err));
-    });
-  }
-
-  cancel(id) {
-    return new Promise((resolve, reject) => {
-      request({
-        method: 'POST',
-        url: `${this.url}/faxes/${id}/cancel`,
-        auth: this.auth,
-      })
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch(err => reject(err));
-    });
-  }
-
-  resend(options = { id: null, callback_url: null }) {
-    return new Promise((resolve, reject) => {
-      const { id, callback_url } = options;
-
-      const req = {
-        method: 'POST',
-        url: `${this.url}/faxes/${id}/resend`,
-        auth: this.auth,
-        callback_url,
-      };
-
-      if (req.callback_url === null || req.callback_url === undefined) delete req.callback_url;
-
-      request(req)
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
+          // eslint-disable-next-line max-len
+          return resolve(new Fax(this.apiKey, this.apiSecret, this.url, res.success, res.message, res.data));
         })
         .catch(err => reject(err));
     });
@@ -127,73 +128,6 @@ module.exports = class {
         url: `${this.url}/faxes`,
         auth: this.auth,
         formData,
-      })
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch(err => reject(err));
-    });
-  }
-
-  testDelete(id) {
-    return new Promise((resolve, reject) => {
-      request({
-        method: 'DELETE',
-        url: `${this.url}/faxes/${id}`,
-        auth: this.auth,
-      })
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch(err => reject(err));
-    });
-  }
-
-  getInfo(id) {
-    return new Promise((resolve, reject) => {
-      request({
-        method: 'GET',
-        url: `${this.url}/faxes/${id}`,
-        auth: this.auth,
-      })
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch(err => reject(err));
-    });
-  }
-
-  getFile(options = { id: null, thumbnail: null }) {
-    return new Promise((resolve, reject) => {
-      const { id, thumbnail } = options;
-
-      const req = {
-        method: 'GET',
-        url: `${this.url}/faxes/${id}/file`,
-        auth: this.auth,
-        qs: { thumbnail },
-      };
-
-      if (req.qs.thumbnail === undefined) delete req.qs;
-
-      request(req)
-        .then(response => resolve(response))
-        .catch(err => reject(err));
-    });
-  }
-
-  deleteFile(id) {
-    return new Promise((resolve, reject) => {
-      request({
-        method: 'DELETE',
-        url: `${this.url}/faxes/${id}/file`,
-        auth: this.auth,
       })
         .then((response) => {
           const res = JSON.parse(response);
