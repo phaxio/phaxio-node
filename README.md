@@ -263,6 +263,7 @@ List sent faxes.
 See [docs](https://www.phaxio.com/docs/api/v2.1/faxes/list_faxes) for more information.
 
 Arguments (Object):
+
 | Key | Value Type | Required? | Description |
 | --- | ---------- | --------- | ----------- |
 | `created_before` | String | False | The end of the range. Must be in RFC 3339 format, except that the timezone may be omitted (e.g. `'2016-05-31T23:59:59'`). Defaults to now. |
@@ -466,11 +467,12 @@ phaxio.phoneNumber.listNumbers()
 ## Testing This Package
 This package tests against the Phaxio API.
 
+**YOU ARE RESPONSIBLE FOR ANY CHARGES ACCRUED WHEN RUNNING THE TEST SUITE.**
+
 **WARNING** Running many of these tests will cause your Phaxio account to be billed, unless you use Test API credentials.
 
 **DOUBLE WARNING** Running tests for provisioning Phone Numbers **WILL ALWAYS** bill your account, even if you use Test API credentials.
 These tests are not run by default. See `test/phonenumber/index.test.js` for comments on how to enable these tests.
-**YOU ARE RESPONSIBLE FOR ANY CHARGES ACCRUED WHEN RUNNING THIS TEST SUITE.**
 
 You should create a `.env` file in the root of this directory containing three pieces of information:
 
@@ -488,3 +490,5 @@ npm run test
 
 # LICENSE
 MIT Copyright 2018 Phaxio
+
+See LICENSE file for full detail.
