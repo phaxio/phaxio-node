@@ -41,7 +41,7 @@ module.exports = class {
     return gi;
   }
 
-  async getFile(options = { id: null, callback_url: null }) {
+  async getFile(options = { id: null, thumbnail: null }) {
     const gf = await getFile(this.url, options.id, this.auth, options);
     return gf;
   }
