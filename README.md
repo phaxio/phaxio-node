@@ -4,8 +4,6 @@ It is suggested that you ONLY use this library with Node.js 8 or higher.
 ## Installation
 
 ```bash
-// Not on NPM as of this version.
-// npm install --save phaxio-official
 npm install --save https://github.com/phaxio/phaxio-node
 ```
 
