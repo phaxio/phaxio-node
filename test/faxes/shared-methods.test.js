@@ -38,11 +38,10 @@ describe('shared methods', function () { // eslint-disable-line func-names
         .then((ores) => { // eslint-disable-line arrow-body-style
           const res = JSON.parse(ores);
           firstFax = res.data.id;
-          return getInfo(url, res.data.id, auth)
-            .then((gi) => {
-              expect(gi.success).to.be.ok();
-            })
-            .catch((err) => { throw err; });
+          return getInfo(url, res.data.id, auth);
+        })
+        .then((gi) => {
+          expect(gi.success).to.be.ok();
         })
         .catch((err) => { throw err; });
     });
@@ -63,11 +62,10 @@ describe('shared methods', function () { // eslint-disable-line func-names
       return req
         .then((ores) => { // eslint-disable-line arrow-body-style
           const res = JSON.parse(ores);
-          return cancel(url, res.data.id, auth)
-            .then((canc) => {
-              expect(canc.success).to.be.ok();
-            })
-            .catch((err) => { throw err; });
+          return cancel(url, res.data.id, auth);
+        })
+        .then((canc) => {
+          expect(canc.success).to.be.ok();
         })
         .catch((err) => { throw err; });
     });

@@ -21,6 +21,7 @@ describe('class: PhoneNumber', function () {
     describe('post-instantiation', () => {
       let phoneNumber;
       let sampleNumber;
+
       before(() => {
         phoneNumber = new PhoneNumber(process.env.TEST_APIKEY, process.env.TEST_APISECRET, 'https://api.phaxio.com/v2.1');
       });

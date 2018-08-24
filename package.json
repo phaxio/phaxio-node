@@ -1,7 +1,7 @@
 {
   "name": "phaxio-official",
   "version": "0.1.0",
-  "description": "The official Node.JS library for talking with the Phaxio API v2.1.0. https://phaxio.com",
+  "description": "The official Node.JS library for the Phaxio API v2.1.0. https://phaxio.com",
   "main": "index.js",
   "scripts": {
     "test": "mocha --exit --recursive --no-colors"

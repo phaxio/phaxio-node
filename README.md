@@ -44,7 +44,7 @@ phaxio.faxes.create({
     // The `create` method returns a fax object with methods attached to it for doing things
     // like cancelling, resending, getting info, etc.
 
-    // Wait 5 seconds, then get the status of the fax by getting its info from the API.
+    // Wait 5 seconds to let the fax send, then get the status of the fax by getting its info from the API.
     return setTimeout(() => {
       fax.getInfo()
     }, 5000)
@@ -72,7 +72,7 @@ phaxio.faxes.listFaxes({ direction: 'sent' })
 Phaxio methods are categorized according to the Phaxio API route that they target.
 See the [Phaxio Docs]('https://www.phaxio.com/docs/api/v2.1/') for more information about the raw API.
 
-**All** Phaxio methods take one argument: either a single argument such as an ID, or an Object containing
+**All Phaxio methods take one argument:** either a single argument such as an ID, or an Object containing
 `key: value` parameters.
 See the documentation below for specifics.
 
@@ -162,7 +162,7 @@ The methods attached to a Fax Object take one or no arguments as they already ha
 | `faxObject.cancel()` | None | Cancels the fax. |
 | `faxObject.resend()` | `callback_url` (optional) | Resends the fax. Default `callback_url` uses the fax's original `callback_url`. Passing a URL string will set the `callback_url` to the new value. |
 | `faxObject.getInfo()` | None | Gets the fax's metadata information. |
-| `faxObject.getFile()` | `thumbnail` (optional) | Gets the fax's document. The default `thumbnail` is `null`, which gets the full file. Specify a string, `'s'` or `'l'`, to get a small or large thumbnail (respectively) of the first page of the document. |
+| `faxObject.getFile()` | `thumbnail` (optional) | Gets the fax's document. The default `thumbnail` is `null`, which gets the full PDF file. Specify a string, `'s'` or `'l'`, to get a small or large JPG thumbnail (respectively) of the first page of the document. |
 | `faxObject.deleteFile()` | None | Deletes a document associated with a fax. |
 | `faxObject.testDelete()` | None | Deletes a fax created using Test API Credentials. |
 
@@ -185,6 +185,14 @@ phaxio.faxes.create({ to: '+1234567890', content_url: 'https://google.com' })
     return fi.save();
   })
   .then(() => console.log('Insert successful.'))
+  .catch((err) => { throw err; });
+
+// Write out the thumbnail of a created fax to a file.
+phaxio.faxes.create({ to: '+1234567890', content_url: 'https://google.com' })
+  .then((faxObject) => {
+    return faxObject.getFile('s')
+  })
+  .then(fileString => fs.writeFileSync(`${__dirname}/thumbnail.jpg`, fileString))
   .catch((err) => { throw err; });
 ```
 
@@ -253,7 +261,7 @@ Arguments (Object):
 
 ```javascript
 phaxio.faxes.getFile({ id: 987 })
-  .then(response => console.log(JSON.stringify(response, null, 2)))
+  .then(fileString => fs.writeFileSync(`${__dirname}/full_file.pdf`, fileString))
   .catch((err) => { throw err; });
 ```
 
@@ -488,7 +496,9 @@ To run the test suite:
 npm run test
 ```
 
+Note: this test suite uses `setTimeout()` to reduce the likelihood of receiving rate limiting errors.
+
 # LICENSE
 MIT Copyright 2018 Phaxio
 
-See LICENSE file for full detail.
+See `LICENSE` file for full detail.
