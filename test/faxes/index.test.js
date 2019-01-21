@@ -153,13 +153,24 @@ describe('class: Faxes', () => {
           .catch((err) => { throw err; });
       });
 
+      it('should throw an error when passed the `batch` option parameter', () => {
+        return faxes.create({
+          to: process.env.PHONE_NUMBER,
+          content_url: 'https://google.com',
+          batch: true,
+          batch_delay: 2,
+        })
+          .catch((err) => {
+            expect(err).to.be.an(Error);
+          });
+      });
+
       // eslint-disable-next-line func-names
       it('should be able to support batched sending of `content_url`s and `file`s', function () {
         this.timeout(5000);
         return faxes.create({
           to: process.env.PHONE_NUMBER,
           content_url: 'https://google.com',
-          batch: true,
           batch_delay: 2,
         })
           .then((leadFax) => {
@@ -199,15 +210,28 @@ describe('class: Faxes', () => {
           })
           .catch((err) => { throw err; });
       });
+
+      it('should get a list of faxes based on tags', () => {
+        const tags = { myTagName: 'myTagValue' };
+        return faxes.listFaxes({ tags })
+          .then((response) => {
+            response.data.forEach((fax) => {
+              expect(fax.tags).to.eql(tags);
+            });
+          })
+          .catch((err) => { throw err; });
+      });
     });
 
     describe('using Fax object', function () { // eslint-disable-line func-names
       this.timeout(6000);
       let faxObject;
+      const tags = { myTagName: 'myTagValue' };
       before((done) => {
         faxes.create({
           to: process.env.PHONE_NUMBER,
           content_url: 'https://google.com',
+          tags,
         })
           .then((fo) => {
             faxObject = fo;
@@ -236,10 +260,11 @@ describe('class: Faxes', () => {
           .catch((err) => { throw err; });
       });
 
-      it('should fetch new metadata', () => {
+      it('should fetch new metadata and include tags', () => {
         return faxObject.getInfo()
           .then((md) => {
             expect(md.success).to.be.ok();
+            expect(md.data.tags).to.eql(tags);
           })
           .catch((err) => { throw err; });
       });

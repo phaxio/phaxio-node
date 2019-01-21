@@ -139,12 +139,11 @@ Arguments (Object):
 | `file` | String or Array | Only when sending files from filesystem | The file you wish to fax. A least one file or content_url parameter is required. Pass an `Array` to send to multiple files. |
 | `content_url` | String or Array | Only when sending public URL's |  URL to be rendered and sent as the fax content. At least one file or content_url parameter is required. Pass an `Array` to send to multiple URL's. |
 | `header_text` | String | False | Text that will be displayed at the top of each page of the fax. 50 characters maximum. Default header text is "-". Note that the header is not applied until the fax is transmitted, so it will not appear on fax PDFs or thumbnails. |
-| `batch` | Boolean | False | Enables batching of faxes. See [docs](https://www.phaxio.com/docs/api/v2.1/faxes/batching) for more information. |
 | `batch_delay` | Integer | False | Specifies the amount of time **in seconds** before the batch is fired. Maximum is 3600 (1 hour). |
 | `batch_collision_avoidance` | Boolean | False |  When batch_delay is set to 'true', fax will be blocked until the receiving machine is no longer busy. See [docs](https://www.phaxio.com/docs/api/v2.1/faxes/batching) for more info. Default is 'false'. |
 | `callback_url` | String | False | You can specify a callback url that will override the one you have defined globally for your account. |
 | `cancel_timeout` | Integer | False | A number of minutes after which the fax will be canceled if it hasn't yet completed. **Must be between 3 and 60.** Additionally, for faxes with a `batch_delay`, the `cancel_timeout` must be at least 3 minutes after the `batch_delay`. If it is not, it will automatically be extended when batching. |
-| `tags` | String or Array | False | A tag that contains metadata relevant to your application. **Value must have format `tag[TAG_NAME]=1234`.** You may specify up to 10 tags. Pass an `Array` to send to multiple tag's. |
+| `tags` | Object | False | An object containing `key: value` metadata tags relevant to your application. You may specify up to 10 tags. `{ my_tag1: tag_val1, my_tag2: tag_val2, ..., my_tag10: tag_val10 }` |
 | `caller_id` | String | False | A Phaxio phone number you would like to use for the caller id. |
 | `test_fail` | String | False | When using a test API key, this will simulate a sending failure at Phaxio. The contents of this parameter should be one of the Phaxio error types which will dictate how the fax will "fail". |
 
@@ -281,7 +280,7 @@ Arguments (Object):
 | `direction` | String | False | Either `'sent'` or `'received'`. Limits results to faxes with the specified direction. |
 | `status` | String | False | Limits results to faxes with the specified status. |
 | `phone_number` | String | False | A phone number in E.164 format that you want to use to filter results. The phone number must be an exact match, not a number fragment. |
-| `tags` | String or Array | False | A tag name and value that you want to use to filter results. **Value must have format `tag[TAG_NAME]=1234`.** Pass an `Array` to send to multiple tag's. |
+| `tags` | Object | False | An object containing `key: value` metadata tags relevant to your application. You may specify up to 10 tags. `{ my_tag1: tag_val1, my_tag2: tag_val2, ..., my_tag10: tag_val10 }` |
 | `per_page` | Integer | False | Maximum number of results returned per call or "page". |
 | `page` | Integer | False | The current page number. 1-based. |
 

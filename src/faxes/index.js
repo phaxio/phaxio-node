@@ -56,7 +56,6 @@ module.exports = class {
     file: null,
     content_url: null,
     header_text: null,
-    batch: null,
     batch_delay: null,
     batch_collision_avoidance: null,
     callback_url: null,
@@ -65,12 +64,18 @@ module.exports = class {
     caller_id: null,
     test_fail: null,
   }) {
+    // eslint-disable-next-line consistent-return
     return new Promise((resolve, reject) => {
       const formData = {};
+      let unsupportedParam;
+
       Object.keys(options).forEach((rec) => {
+        if (rec === 'batch') unsupportedParam = 'batch';
         if (options[rec] !== null) formData[rec] = options[rec];
         if (typeof formData[rec] === 'boolean') formData[rec] = formData[rec].toString();
       });
+
+      if (unsupportedParam) return reject(new Error(`Unsupported option: ${unsupportedParam}`));
 
       const req = {
         method: 'POST',
@@ -81,7 +86,11 @@ module.exports = class {
       const caller = request(req);
       const form = caller.form();
       Object.keys(formData).forEach((key) => {
-        if (Array.isArray(formData[key]) && key === 'file') {
+        if (typeof formData[key] === 'object' && key === 'tags' && formData[key] !== null) {
+          Object.keys(formData[key]).forEach((tagkey) => {
+            form.append(`tag[${tagkey}]`, formData[key][tagkey]);
+          });
+        } else if (Array.isArray(formData[key]) && key === 'file') {
           formData[key].forEach((val) => {
             form.append(`${key}[]`, fs.createReadStream(val));
           });
@@ -151,7 +160,14 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       const query = {};
       Object.keys(options).forEach((rec) => {
-        if (options[rec] !== null) query[rec] = options[rec];
+        if (rec === 'tags' && typeof options[rec] === 'object' && options[rec] !== null) {
+          Object.keys(options[rec]).forEach((tag) => {
+            const newrec = `tag[${tag}]`;
+            query[newrec] = options[rec][tag];
+          });
+        } else if (options[rec] !== null) {
+          query[rec] = options[rec];
+        }
       });
 
       request({
