@@ -67,15 +67,11 @@ module.exports = class {
     // eslint-disable-next-line consistent-return
     return new Promise((resolve, reject) => {
       const formData = {};
-      let unsupportedParam;
 
       Object.keys(options).forEach((rec) => {
-        if (rec === 'batch') unsupportedParam = 'batch';
         if (options[rec] !== null) formData[rec] = options[rec];
         if (typeof formData[rec] === 'boolean') formData[rec] = formData[rec].toString();
       });
-
-      if (unsupportedParam) return reject(new Error(`Unsupported option: ${unsupportedParam}`));
 
       const req = {
         method: 'POST',

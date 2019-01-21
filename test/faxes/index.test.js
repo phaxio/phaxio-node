@@ -153,18 +153,6 @@ describe('class: Faxes', () => {
           .catch((err) => { throw err; });
       });
 
-      it('should throw an error when passed the `batch` option parameter', () => {
-        return faxes.create({
-          to: process.env.PHONE_NUMBER,
-          content_url: 'https://google.com',
-          batch: true,
-          batch_delay: 2,
-        })
-          .catch((err) => {
-            expect(err).to.be.an(Error);
-          });
-      });
-
       // eslint-disable-next-line func-names
       it('should be able to support batched sending of `content_url`s and `file`s', function () {
         this.timeout(5000);
