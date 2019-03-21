@@ -21,6 +21,7 @@ describe('class: Account', () => {
       expect(account).to.have.property('apiSecret');
       expect(account).to.have.property('url');
       expect(account).to.have.property('status');
+      expect(account).to.have.property('agentOptions');
     });
 
     describe('method: status', () => {

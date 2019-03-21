@@ -27,6 +27,7 @@ describe('class: PhaxCode', () => {
       expect(phaxcode).to.have.property('url');
       expect(phaxcode).to.have.property('create');
       expect(phaxcode).to.have.property('get');
+      expect(phaxcode).to.have.property('agentOptions');
     });
 
     describe('method: create', () => {

@@ -30,11 +30,14 @@ describe('class: Phaxio', () => {
       expect(phaxio).to.have.property('account');
       expect(phaxio).to.have.property('phaxCode');
       expect(phaxio).to.have.property('phoneNumber');
+      expect(phaxio).to.have.property('agentOptions');
+      expect(phaxio.agentOptions).to.have.property('minVersion');
     });
 
     it('should have the appropriate values for properties', () => {
       expect(phaxio.apiKey).to.be(process.env.TEST_APIKEY);
       expect(phaxio.apiSecret).to.be(process.env.TEST_APISECRET);
+      expect(phaxio.agentOptions.minVersion).to.be('TLSv1.2');
     });
   });
 });

@@ -13,41 +13,42 @@ const {
 } = require('./shared-methods');
 
 module.exports = class {
-  constructor(apiKey, apiSecret, url) {
+  constructor(apiKey, apiSecret, url, agentOptions) {
     this.apiKey = apiKey;
     this.apiSecret = apiSecret;
     this.url = url;
+    this.agentOptions = agentOptions;
 
     this.auth = { user: this.apiKey, pass: this.apiSecret };
   }
 
   async cancel(id) {
-    const canc = await cancel(this.url, id, this.auth);
+    const canc = await cancel(this.url, id, this.auth, this.agentOptions);
     return canc;
   }
 
   async resend(options = { id: null, callback_url: null }) {
-    const res = await resend(this.url, options.id, this.auth, options);
+    const res = await resend(this.url, options.id, this.auth, options, this.agentOptions);
     return res;
   }
 
   async testDelete(id) {
-    const td = await testDelete(this.url, id, this.auth);
+    const td = await testDelete(this.url, id, this.auth, this.agentOptions);
     return td;
   }
 
   async getInfo(id) {
-    const gi = await getInfo(this.url, id, this.auth);
+    const gi = await getInfo(this.url, id, this.auth, this.agentOptions);
     return gi;
   }
 
   async getFile(options = { id: null, thumbnail: null }) {
-    const gf = await getFile(this.url, options.id, this.auth, options);
+    const gf = await getFile(this.url, options.id, this.auth, options, this.agentOptions);
     return gf;
   }
 
   async deleteFile(id) {
-    const df = await deleteFile(this.url, id, this.auth);
+    const df = await deleteFile(this.url, id, this.auth, this.agentOptions);
     return df;
   }
 
@@ -77,6 +78,7 @@ module.exports = class {
         method: 'POST',
         url: `${this.url}/faxes`,
         auth: this.auth,
+        agentOptions: this.agentOptions,
       };
 
       const caller = request(req);
@@ -133,6 +135,7 @@ module.exports = class {
         url: `${this.url}/faxes`,
         auth: this.auth,
         formData,
+        agentOptions: this.agentOptions,
       })
         .then((response) => {
           const res = JSON.parse(response);
@@ -171,6 +174,7 @@ module.exports = class {
         url: `${this.url}/faxes`,
         auth: this.auth,
         qs: query,
+        agentOptions: this.agentOptions,
       })
         .then((response) => {
           const res = JSON.parse(response);

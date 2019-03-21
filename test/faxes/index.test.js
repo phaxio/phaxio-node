@@ -30,6 +30,7 @@ describe('class: Faxes', () => {
       expect(faxes).to.have.property('getFile');
       expect(faxes).to.have.property('deleteFile');
       expect(faxes).to.have.property('listFaxes');
+      expect(faxes).to.have.property('agentOptions');
     });
 
     describe('method: create', () => {

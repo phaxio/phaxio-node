@@ -34,6 +34,7 @@ describe('class: PhoneNumber', function () {
         expect(phoneNumber).to.have.property('listNumbers');
         expect(phoneNumber).to.have.property('getNumberInfo');
         expect(phoneNumber).to.have.property('provisionNumber');
+        expect(phoneNumber).to.have.property('agentOptions');
       });
 
       describe('method: provisionNumber', () => {

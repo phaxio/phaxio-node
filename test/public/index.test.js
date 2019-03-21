@@ -20,6 +20,7 @@ describe('class: Public', () => {
       expect(pub).to.have.property('url');
       expect(pub).to.have.property('getAreaCodes');
       expect(pub).to.have.property('getCountries');
+      expect(pub).to.have.property('agentOptions');
     });
 
     describe('method: getAreaCodes', () => {

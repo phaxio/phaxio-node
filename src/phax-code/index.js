@@ -2,10 +2,11 @@ const request = require('request-promise-native');
 const errorHandler = require('../error-handler');
 
 module.exports = class {
-  constructor(apiKey, apiSecret, url) {
+  constructor(apiKey, apiSecret, url, agentOptions) {
     this.apiKey = apiKey;
     this.apiSecret = apiSecret;
     this.url = url;
+    this.agentOptions = agentOptions;
 
     this.auth = { user: this.apiKey, pass: this.apiSecret };
   }
@@ -21,6 +22,7 @@ module.exports = class {
         method: 'POST',
         url: `${this.url}/phax_codes`,
         auth: this.auth,
+        agentOptions: this.agentOptions,
       };
 
       if (formData.length !== 0) req.formData = formData;
