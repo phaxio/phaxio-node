@@ -87,7 +87,7 @@ Arguments:
 | --- | ---------- | --------- | ----------- |
 | `phaxio api key` | String | True | Your Phaxio API Key |
 | `phaxio api secret` | String | True | Your Phaxio API Secret |
-| `minimum TLS Version` | String | False | Default: `TLSv1.2`, other possible options are the same as `minVersion` in the [TLS documentation](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options).
+| `minimum TLS Version` | String | False | Default: `TLSv1.2`, other possible options are the same as `minVersion` in the [TLS documentation](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options). |
 
 ```javascript
 const Phaxio = require('phaxio-official');
