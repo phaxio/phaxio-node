@@ -1,12 +1,13 @@
 const request = require('request-promise-native');
 const errorHandler = require('../error-handler');
 
-function cancel(url, id, auth) {
+function cancel(url, id, auth, agentOptions) {
   return new Promise((resolve, reject) => {
     request({
       method: 'POST',
       url: `${url}/faxes/${id}/cancel`,
       auth,
+      agentOptions,
     })
       .then((response) => {
         const res = JSON.parse(response);
@@ -17,7 +18,7 @@ function cancel(url, id, auth) {
   });
 }
 
-function resend(url, id, auth, options = { id: null, callback_url: null }) {
+function resend(url, id, auth, options = { id: null, callback_url: null }, agentOptions) {
   return new Promise((resolve, reject) => {
     const { callback_url } = options; // eslint-disable-line camelcase
 
@@ -26,6 +27,7 @@ function resend(url, id, auth, options = { id: null, callback_url: null }) {
       url: `${url}/faxes/${id}/resend`,
       auth,
       callback_url,
+      agentOptions,
     };
 
     if (req.callback_url === null || req.callback_url === undefined) delete req.callback_url;
@@ -40,12 +42,13 @@ function resend(url, id, auth, options = { id: null, callback_url: null }) {
   });
 }
 
-function testDelete(url, id, auth) {
+function testDelete(url, id, auth, agentOptions) {
   return new Promise((resolve, reject) => {
     request({
       method: 'DELETE',
       url: `${url}/faxes/${id}`,
       auth,
+      agentOptions,
     })
       .then((response) => {
         const res = JSON.parse(response);
@@ -56,12 +59,13 @@ function testDelete(url, id, auth) {
   });
 }
 
-function getInfo(url, id, auth) {
+function getInfo(url, id, auth, agentOptions) {
   return new Promise((resolve, reject) => {
     request({
       method: 'GET',
       url: `${url}/faxes/${id}`,
       auth,
+      agentOptions,
     })
       .then((response) => {
         const res = JSON.parse(response);
@@ -72,7 +76,7 @@ function getInfo(url, id, auth) {
   });
 }
 
-function getFile(url, id, auth, options = { id: null, thumbnail: null }) {
+function getFile(url, id, auth, options = { id: null, thumbnail: null }, agentOptions) {
   return new Promise((resolve, reject) => { // eslint-disable-line consistent-return
     const thumbnail = options.thumbnail === undefined ? null : options.thumbnail;
 
@@ -84,6 +88,7 @@ function getFile(url, id, auth, options = { id: null, thumbnail: null }) {
       method: 'GET',
       url: `${url}/faxes/${id}/file`,
       auth,
+      agentOptions,
     };
 
     if (thumbnail !== null) req.qs.thumbnail = thumbnail;
@@ -94,12 +99,13 @@ function getFile(url, id, auth, options = { id: null, thumbnail: null }) {
   });
 }
 
-function deleteFile(url, id, auth) {
+function deleteFile(url, id, auth, agentOptions) {
   return new Promise((resolve, reject) => {
     request({
       method: 'DELETE',
       url: `${url}/faxes/${id}/file`,
       auth,
+      agentOptions,
     })
       .then((response) => {
         const res = JSON.parse(response);

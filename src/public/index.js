@@ -2,8 +2,9 @@ const request = require('request-promise-native');
 const errorHandler = require('../error-handler');
 
 module.exports = class {
-  constructor(url) {
+  constructor(url, agentOptions) {
     this.url = url;
+    this.agentOptions = agentOptions;
   }
 
 
@@ -24,6 +25,7 @@ module.exports = class {
       const req = {
         method: 'GET',
         url: `${this.url}/public/area_codes`,
+        agentOptions: this.agentOptions,
       };
 
       if (qs.length !== 0) req.qs = qs;

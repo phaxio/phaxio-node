@@ -74,6 +74,27 @@ phaxio.faxes.listFaxes({ direction: 'sent' })
 Phaxio methods are categorized according to the Phaxio API route that they target.
 See the [Phaxio Docs]('https://www.phaxio.com/docs/api/v2.1/') for more information about the raw API.
 
+### Initialization
+Initializing the `Phaxio` class takes two required arguments, the Key and Secret you retreived from Phaxio, and
+allows for one optional argument, the minimum TLS version to use. By default, the minimum TLS version is set to
+`TLSv1.2`. See the [TLS documentation](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options)  for
+other possible options to `minVersion` if you require something other than `TLSv1.2`. **Modifying the minimum TLS
+version is not recommended.**
+
+Arguments:
+
+| Key | Value Type | Required? | Description |
+| --- | ---------- | --------- | ----------- |
+| `phaxio api key` | String | True | Your Phaxio API Key |
+| `phaxio api secret` | String | True | Your Phaxio API Secret |
+| `minimum TLS Version` | String | False | Default: `TLSv1.2`, other possible options are the same as `minVersion` in the [TLS documentation](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options).
+
+```javascript
+const Phaxio = require('phaxio-official');
+
+const phaxio = new Phaxio(<phaxio api key>, <phaxio api secret>, [optional: <minimum TLS version>]);
+```
+
 **All Phaxio methods take one argument:** either a single argument such as an ID, or an Object containing
 `key: value` parameters.
 See the documentation below for specifics.
