@@ -89,6 +89,7 @@ function getFile(url, id, auth, options = { id: null, thumbnail: null }, agentOp
       url: `${url}/faxes/${id}/file`,
       auth,
       agentOptions,
+      encoding: null,
     };
 
     if (thumbnail !== null) req.qs.thumbnail = thumbnail;
