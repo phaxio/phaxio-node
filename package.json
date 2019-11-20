@@ -15,14 +15,14 @@
   "license": "MIT",
   "dependencies": {
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7"
+    "request-promise-native": "^1.0.8"
   },
   "devDependencies": {
-    "dotenv": "^6.2.0",
-    "eslint": "^5.15.3",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
     "expect.js": "^0.3.1",
-    "mocha": "^5.2.0"
+    "mocha": "^6.2.2"
   }
 }
