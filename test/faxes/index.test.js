@@ -261,7 +261,7 @@ describe('class: Faxes', () => {
       it('should fetch the fax\'s file', () => {
         return faxObject.getFile()
           .then((file) => {
-            expect(file).to.be.a('string');
+            expect(Buffer.isBuffer(file)).to.be.ok();
           })
           .catch((err) => { throw err; });
       });

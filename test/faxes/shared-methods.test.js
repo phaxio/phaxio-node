@@ -90,7 +90,7 @@ describe('shared methods', function () { // eslint-disable-line func-names
       it('should get a fax\'s file', () => {
         return getFile(url, firstFax, auth, { id: firstFax })
           .then((gf) => {
-            expect(gf).to.be.a('string');
+            expect(Buffer.isBuffer(gf)).to.be.ok();
           })
           .catch((err) => { throw err; });
       });
