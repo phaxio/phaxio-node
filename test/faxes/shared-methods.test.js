@@ -87,6 +87,14 @@ describe('shared methods', function () { // eslint-disable-line func-names
     });
 
     describe('function: getFile', () => {
+      it('should get a fax\'s thumbnail', () => {
+        return getFile(url, firstFax, auth, { id: firstFax, thumbnail: 'l' })
+          .then((gf) => {
+            expect(Buffer.isBuffer(gf)).to.be.ok();
+          })
+          .catch((err) => { throw err; });
+      });
+
       it('should get a fax\'s file', () => {
         return getFile(url, firstFax, auth, { id: firstFax })
           .then((gf) => {

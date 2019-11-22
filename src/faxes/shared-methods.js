@@ -14,7 +14,7 @@ function cancel(url, id, auth, agentOptions) {
         if (!res.success) return reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch(err => reject(err));
+      .catch((err) => reject(err));
   });
 }
 
@@ -38,7 +38,7 @@ function resend(url, id, auth, options = { id: null, callback_url: null }, agent
         if (!res.success) return reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch(err => reject(err));
+      .catch((err) => reject(err));
   });
 }
 
@@ -55,7 +55,7 @@ function testDelete(url, id, auth, agentOptions) {
         if (!res.success) return reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch(err => reject(err));
+      .catch((err) => reject(err));
   });
 }
 
@@ -72,7 +72,7 @@ function getInfo(url, id, auth, agentOptions) {
         if (!res.success) return reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch(err => reject(err));
+      .catch((err) => reject(err));
   });
 }
 
@@ -92,11 +92,11 @@ function getFile(url, id, auth, options = { id: null, thumbnail: null }, agentOp
       encoding: null,
     };
 
-    if (thumbnail !== null) req.qs.thumbnail = thumbnail;
+    if (thumbnail !== null) req.qs = { thumbnail };
 
     request(req)
-      .then(response => resolve(response))
-      .catch(err => reject(err));
+      .then((response) => resolve(response))
+      .catch((err) => reject(err));
   });
 }
 
@@ -113,7 +113,7 @@ function deleteFile(url, id, auth, agentOptions) {
         if (!res.success) return reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch(err => reject(err));
+      .catch((err) => reject(err));
   });
 }
 

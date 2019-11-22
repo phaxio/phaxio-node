@@ -1,1 +1,1 @@
-module.exports = errMessage => new Error(`PhaxioAPIError: ${errMessage}`);
+module.exports = (errMessage) => new Error(`PhaxioAPIError: ${errMessage}`);
