@@ -59,7 +59,7 @@ describe('class: PhoneNumber', function () {
               expect(response.success).to.be.ok();
               expect(response.message).to.be('Retrieved user phone numbers successfully');
               expect(response.data).to.be.an(Array);
-              expect(response.data.filter(rec => rec.phone_number === sampleNumber)).to.be.ok();
+              expect(response.data.filter((rec) => rec.phone_number === sampleNumber)).to.be.ok();
             })
             .catch((err) => { throw err; });
         });

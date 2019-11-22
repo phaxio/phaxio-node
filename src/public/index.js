@@ -36,7 +36,7 @@ module.exports = class {
           if (!res.success) return reject(errorHandler(res.message));
           return resolve(res);
         })
-        .catch(err => reject(err));
+        .catch((err) => reject(err));
     });
   }
 
@@ -55,7 +55,7 @@ module.exports = class {
           if (!res.success) return reject(errorHandler(res.message));
           return resolve(res);
         })
-        .catch(err => reject(err));
+        .catch((err) => reject(err));
     });
   }
 };
