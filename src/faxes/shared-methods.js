@@ -92,7 +92,7 @@ function getFile(url, id, auth, options = { id: null, thumbnail: null }, agentOp
       encoding: null,
     };
 
-    if (thumbnail !== null) req.qs.thumbnail = thumbnail;
+    if (thumbnail !== null) req.qs = { thumbnail };
 
     request(req)
       .then((response) => resolve(response))
