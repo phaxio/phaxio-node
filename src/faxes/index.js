@@ -84,6 +84,8 @@ module.exports = class {
       const caller = request(req)
       const form = caller.form()
       Object.keys(formData).forEach((key) => {
+        const val = formData[key]
+
         if (typeof formData[key] === 'object' && key === 'tags' && formData[key] !== null) {
           Object.keys(formData[key]).forEach((tagkey) => {
             form.append(`tag[${tagkey}]`, formData[key][tagkey])
@@ -97,12 +99,10 @@ module.exports = class {
             form.append(`${key}[]`, val)
           })
         } else if (key === 'file') {
-          if (typeof formData[key] === 'string') {
+          if (val.type === 'buffer') {
+            form.append(key, formData.data, { filename: val.filename })
+          } else {
             form.append(key, fs.createReadStream(formData[key]))
-          } else if (typeof formData[key] === 'object') {
-            form.append(key, formData[key].buffer, {
-              filename: formData[key].filename
-            })
           }
         } else {
           form.append(key, formData[key])
