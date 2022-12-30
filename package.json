@@ -23,6 +23,6 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "expect.js": "^0.3.1",
-    "mocha": "^6.2.2"
+    "mocha": "^10.2.0"
   }
 }
