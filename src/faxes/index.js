@@ -1,5 +1,5 @@
 const fs = require('fs');
-const request = require('request-promise-native');
+const request = require('axios');
 const errorHandler = require('../error-handler');
 
 const Fax = require('./fax');
@@ -66,7 +66,6 @@ module.exports = class {
     test_fail: null,
   }) {
     // eslint-disable-next-line consistent-return
-    return new Promise((resolve, reject) => {
       const formData = {};
 
       Object.keys(options).forEach((rec) => {
@@ -74,15 +73,7 @@ module.exports = class {
         if (typeof formData[rec] === 'boolean') formData[rec] = formData[rec].toString();
       });
 
-      const req = {
-        method: 'POST',
-        url: `${this.url}/faxes`,
-        auth: this.auth,
-        agentOptions: this.agentOptions,
-      };
-
-      const caller = request(req);
-      const form = caller.form();
+      const form = new FormData();
       Object.keys(formData).forEach((key) => {
         if (typeof formData[key] === 'object' && key === 'tags' && formData[key] !== null) {
           Object.keys(formData[key]).forEach((tagkey) => {
@@ -103,7 +94,10 @@ module.exports = class {
         }
       });
 
-      caller
+      return request
+        .post(`${this.url}/account/status`, form, {
+          auth: auth
+        })
         .then((response) => {
           const res = JSON.parse(response);
           if (!res.success) return reject(errorHandler(res.message));
@@ -111,7 +105,6 @@ module.exports = class {
           return resolve(new Fax(this.apiKey, this.apiSecret, this.url, res.success, res.message, res.data));
         })
         .catch((err) => reject(err));
-    });
   }
 
   testReceive(options = {
@@ -119,31 +112,28 @@ module.exports = class {
     from_number: null,
     to_number: null,
   }) {
-    return new Promise((resolve, reject) => {
-      const formData = { direction: 'received' };
+    const form = new FormData();
 
-      Object.keys(options).forEach((rec) => {
-        if (rec === 'file' && options[rec] !== null) {
-          formData[rec] = fs.createReadStream(options[rec]);
-        } else if (options[rec] !== null) {
-          formData[rec] = options[rec];
-        }
-      });
+    form.append('direction', 'received');
 
-      request({
-        method: 'POST',
-        url: `${this.url}/faxes`,
-        auth: this.auth,
-        formData,
-        agentOptions: this.agentOptions,
-      })
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch((err) => reject(err));
+    Object.keys(options).forEach((rec) => {
+      if (rec === 'file' && options[rec] !== null) {
+        form.append('fileAttachment', fs.createReadStream(options[rec]));
+      } else if (options[rec] !== null) {
+        form.append('rec', options[rec]);
+      }
     });
+
+    return request
+      .post(`${this.url}/faxes`, form, {
+        auth: auth
+      })
+      .then((response) => {
+        const res = JSON.parse(response);
+        if (!res.success) return reject(errorHandler(res.message));
+        return resolve(res);
+      })
+      .catch((err) => reject(err));
   }
 
   listFaxes(options = {
@@ -156,32 +146,27 @@ module.exports = class {
     per_page: null,
     page: null,
   }) {
-    return new Promise((resolve, reject) => {
-      const query = {};
-      Object.keys(options).forEach((rec) => {
-        if (rec === 'tags' && typeof options[rec] === 'object' && options[rec] !== null) {
-          Object.keys(options[rec]).forEach((tag) => {
-            const newrec = `tag[${tag}]`;
-            query[newrec] = options[rec][tag];
-          });
-        } else if (options[rec] !== null) {
-          query[rec] = options[rec];
-        }
-      });
-
-      request({
-        method: 'GET',
-        url: `${this.url}/faxes`,
-        auth: this.auth,
-        qs: query,
-        agentOptions: this.agentOptions,
-      })
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch((err) => reject(err));
+    const query = {};
+    Object.keys(options).forEach((rec) => {
+      if (rec === 'tags' && typeof options[rec] === 'object' && options[rec] !== null) {
+        Object.keys(options[rec]).forEach((tag) => {
+          const newrec = `tag[${tag}]`;
+          query[newrec] = options[rec][tag];
+        });
+      } else if (options[rec] !== null) {
+        query[rec] = options[rec];
+      }
     });
+
+    return request
+      .get(`${this.url}/faxes`, query, {
+        auth: auth
+      })
+      .then((response) => {
+        const res = JSON.parse(response);
+        if (!res.success) return reject(errorHandler(res.message));
+        return resolve(res);
+      })
+      .catch((err) => reject(err));
   }
 };

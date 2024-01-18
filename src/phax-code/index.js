@@ -1,4 +1,4 @@
-const request = require('request-promise-native');
+const request = require('axios');
 const errorHandler = require('../error-handler');
 
 module.exports = class {
@@ -12,55 +12,49 @@ module.exports = class {
   }
 
   create(options = { metadata: null, type: null }) {
-    return new Promise((resolve, reject) => {
-      const formData = {};
-      Object.keys(options).forEach((rec) => {
-        if (options[rec] !== null) formData[rec] = options[rec];
-      });
-
-      const req = {
-        method: 'POST',
-        url: `${this.url}/phax_codes`,
-        auth: this.auth,
-        agentOptions: this.agentOptions,
-      };
-
-      if (formData.length !== 0) req.formData = formData;
-
-      request(req)
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch((err) => reject(err));
+    const form = new FormData;
+    Object.keys(options).forEach((rec) => {
+      if (options[rec] !== null) form.append('rec', options[rec]);
     });
+
+    const req = {
+      method: 'POST',
+      url: `${this.url}/phax_codes`,
+      auth: this.auth,
+      agentOptions: this.agentOptions,
+    };
+
+    return request
+      .post(`${this.url}/phax_codes`, form, {
+        auth: auth
+      })
+      .then((response) => {
+        const res = JSON.parse(response);
+        if (!res.success) return reject(errorHandler(res.message));
+        return resolve(res);
+      })
+      .catch((err) => reject(err));
   }
 
   get(options = { id: null, type: null }) {
-    return new Promise((resolve, reject) => {
-      let phaxCode;
-      if (options.id === null) {
-        phaxCode = 'phax_code';
-      } else {
-        phaxCode = `phax_codes/${options.id}`;
-      }
+    let phaxCode;
+    if (options.id === null) {
+      phaxCode = 'phax_code';
+    } else {
+      phaxCode = `phax_codes/${options.id}`;
+    }
 
-      const req = {
-        method: 'GET',
-        url: `${this.url}/${phaxCode}`,
-        auth: this.auth,
-      };
+    if (options.type !== null) req.type = options.type;
 
-      if (options.type !== null) req.type = options.type;
-
-      request(req)
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch((err) => reject(err));
-    });
+    return request
+      .get(`${this.url}/${phaxCode}`, {
+        auth: auth
+      })
+      .then((response) => {
+        const res = JSON.parse(response);
+        if (!res.success) return reject(errorHandler(res.message));
+        return resolve(res);
+      })
+      .catch((err) => reject(err));
   }
 };

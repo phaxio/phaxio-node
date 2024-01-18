@@ -1,6 +1,6 @@
 /* eslint arrow-body-style: "off" */
 const expect = require('expect.js');
-const request = require('request-promise-native');
+const request = require('axios');
 
 const {
   cancel,
@@ -24,17 +24,15 @@ describe('shared methods', function () { // eslint-disable-line func-names
 
   describe('function: getInfo', () => {
     it('should get a fax\'s info', () => {
-      const req = request({
-        method: 'POST',
-        url: `${url}/faxes`,
-        auth,
-      });
 
-      const form = req.form();
+      const form = new FormData;
       form.append('content_url', 'https://google.com');
       form.append('to', process.env.PHONE_NUMBER);
 
-      return req
+      return request
+        .post(`${url}/faxes`, {
+          auth: auth
+        })
         .then((ores) => { // eslint-disable-line arrow-body-style
           const res = JSON.parse(ores);
           firstFax = res.data.id;
@@ -49,17 +47,14 @@ describe('shared methods', function () { // eslint-disable-line func-names
 
   describe('function: cancel', () => {
     it('should cancel a fax', () => {
-      const req = request({
-        method: 'POST',
-        url: `${url}/faxes`,
-        auth,
-      });
-
-      const form = req.form();
+      const form = new FormData();
       form.append('content_url', 'https://google.com');
       form.append('to', process.env.PHONE_NUMBER);
 
-      return req
+      return request
+        .post(`${url}/faxes`, {
+          auth: auth
+        })
         .then((ores) => { // eslint-disable-line arrow-body-style
           const res = JSON.parse(ores);
           return cancel(url, res.data.id, auth);

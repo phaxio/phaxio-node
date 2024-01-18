@@ -1,4 +1,4 @@
-const request = require('request-promise-native');
+const request = require('axios');
 const errorHandler = require('../error-handler');
 
 module.exports = class {
@@ -12,88 +12,68 @@ module.exports = class {
   }
 
   releaseNumber(number) {
-    return new Promise((resolve, reject) => {
-      request({
-        method: 'DELETE',
-        url: `${this.url}/phone_numbers/${number}`,
-        auth: this.auth,
-        agentOptions: this.agentOptions,
+    return request
+      .delete(`${this.url}/phone_numbers/${number}`, {
+        auth: auth
       })
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch((err) => reject(err));
-    });
+      .then((response) => {
+        const res = JSON.parse(response);
+        if (!res.success) return reject(errorHandler(res.message));
+        return resolve(res);
+      })
+      .catch((err) => reject(err));
   }
 
   listNumbers(options = { country_code: null, area_code: null }) {
-    return new Promise((resolve, reject) => {
-      const query = {};
-      Object.keys(options).forEach((rec) => {
-        if (options[rec] !== null) query[rec] = options[rec];
-      });
-
-      const req = {
-        method: 'GET',
-        url: `${this.url}/phone_numbers`,
-        auth: this.auth,
-        agentOptions: this.agentOptions,
-      };
-
-      if (query.length !== 0) req.qs = query;
-
-      request(req)
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch((err) => reject(err));
+    const query = {};
+    Object.keys(options).forEach((rec) => {
+      if (options[rec] !== null) query[rec] = options[rec];
     });
+
+    if (query.length !== 0) req.qs = query;
+
+    return request
+      .get(`${this.url}/phone_numbers`, query, {
+        auth: auth
+      })
+      .then((response) => {
+        const res = JSON.parse(response);
+        if (!res.success) return reject(errorHandler(res.message));
+        return resolve(res);
+      })
+      .catch((err) => reject(err));
   }
 
   getNumberInfo(number) {
-    return new Promise((resolve, reject) => {
-      request({
-        method: 'GET',
-        url: `${this.url}/phone_numbers/${number}`,
-        auth: this.auth,
-        agentOptions: this.agentOptions,
+    return request
+      .get(`${this.url}/phone_numbers/${number}`, {
+        auth: auth
       })
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch((err) => reject(err));
-    });
+      .then((response) => {
+        const res = JSON.parse(response);
+        if (!res.success) return reject(errorHandler(res.message));
+        return resolve(res);
+      })
+      .catch((err) => reject(err));
   }
 
   provisionNumber(options = { country_code: null, area_code: null, callback_url: null }) {
-    return new Promise((resolve, reject) => {
-      const formData = {};
-      Object.keys(options).forEach((rec) => {
-        if (options[rec] !== null) formData[rec] = options[rec];
-      });
-
-      const req = {
-        method: 'POST',
-        url: `${this.url}/phone_numbers`,
-        auth: this.auth,
-        agentOptions: this.agentOptions,
-      };
-
-      if (formData.length !== 0) req.formData = formData;
-
-      request(req)
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch((err) => reject(err));
+    const form = new FormData;
+    Object.keys(options).forEach((rec) => {
+      if (options[rec] !== null) form.append('rec', options[rec]);
     });
+
+    if (formData.length !== 0) req.formData = formData;
+
+    return request
+      .post(`${this.url}/phone_numbers`, form, {
+        auth: auth
+      })
+      .then((response) => {
+        const res = JSON.parse(response);
+        if (!res.success) return reject(errorHandler(res.message));
+        return resolve(res);
+      })
+      .catch((err) => reject(err));
   }
 };
