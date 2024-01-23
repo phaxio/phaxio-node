@@ -33,10 +33,10 @@ module.exports = class {
       .get(`${this.url}/public/area_codes`, qs)
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.reject(err));
   }
 
   getCountries(options = {
@@ -47,9 +47,9 @@ module.exports = class {
       .get(`${this.url}/public/countries`)
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.reject(err));
   }
 };

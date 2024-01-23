@@ -96,15 +96,15 @@ module.exports = class {
 
       return request
         .post(`${this.url}/account/status`, form, {
-          auth: auth
+          auth: this.auth
         })
         .then((response) => {
           const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
+          if (!res.success) return Promise.reject(errorHandler(res.message));
           // eslint-disable-next-line max-len
           return resolve(new Fax(this.apiKey, this.apiSecret, this.url, res.success, res.message, res.data));
         })
-        .catch((err) => reject(err));
+        .catch((err) => Promise.reject(err));
   }
 
   testReceive(options = {
@@ -126,14 +126,14 @@ module.exports = class {
 
     return request
       .post(`${this.url}/faxes`, form, {
-        auth: auth
+        auth: this.auth
       })
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.reject(err));
   }
 
   listFaxes(options = {
@@ -160,13 +160,13 @@ module.exports = class {
 
     return request
       .get(`${this.url}/faxes`, query, {
-        auth: auth
+        auth: this.auth
       })
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.reject(err));
   }
 };

@@ -18,10 +18,10 @@ module.exports = class {
       })
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.reject(err));
   }
 
   listNumbers(options = { country_code: null, area_code: null }) {
@@ -38,10 +38,10 @@ module.exports = class {
       })
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.reject(err));
   }
 
   getNumberInfo(number) {
@@ -51,10 +51,10 @@ module.exports = class {
       })
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.reject(err));
   }
 
   provisionNumber(options = { country_code: null, area_code: null, callback_url: null }) {
@@ -71,9 +71,9 @@ module.exports = class {
       })
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.reject(err));
   }
 };

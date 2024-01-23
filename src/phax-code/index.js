@@ -17,23 +17,16 @@ module.exports = class {
       if (options[rec] !== null) form.append('rec', options[rec]);
     });
 
-    const req = {
-      method: 'POST',
-      url: `${this.url}/phax_codes`,
-      auth: this.auth,
-      agentOptions: this.agentOptions,
-    };
-
     return request
       .post(`${this.url}/phax_codes`, form, {
-        auth: auth
+        auth: this.auth
       })
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.Promise.reject(err));
   }
 
   get(options = { id: null, type: null }) {
@@ -44,17 +37,15 @@ module.exports = class {
       phaxCode = `phax_codes/${options.id}`;
     }
 
-    if (options.type !== null) req.type = options.type;
-
     return request
       .get(`${this.url}/${phaxCode}`, {
-        auth: auth
+        auth: this.auth
       })
       .then((response) => {
         const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
+        if (!res.success) return Promise.Promise.reject(errorHandler(res.message));
         return resolve(res);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.Promise.reject(err));
   }
 };

@@ -8,7 +8,7 @@ module.exports = class {
     this.url = url;
     this.agentOptions = agentOptions;
 
-    this.auth = { user: this.apiKey, pass: this.apiSecret };
+    this.auth = { username: this.apiKey, password: this.apiSecret };
   }
 
   status() {
@@ -17,10 +17,10 @@ module.exports = class {
         auth: this.auth
       })
       .then((response) => {
-        const res = JSON.parse(response);
-        if (!res.success) return reject(errorHandler(res.message));
-        return resolve(res);
+        const tempResponse = response;
+        if (!response.data.success) return Promise.reject(errorHandler(response.data.message));
+        return Promise.resolve(response.data);
       })
-      .catch((err) => reject(err));
+      .catch((err) => Promise.reject(err));
   }
 };

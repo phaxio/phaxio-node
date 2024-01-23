@@ -8,10 +8,10 @@ function cancel(url, id, auth, agentOptions) {
     })
     .then((response) => {
       const res = JSON.parse(response);
-      if (!res.success) return reject(errorHandler(res.message));
+      if (!res.success) return Promise.reject(errorHandler(res.message));
       return resolve(res);
     })
-    .catch((err) => reject(err));
+    .catch((err) => Promise.reject(err));
 }
 
 function resend(url, id, auth, options = { id: null, callback_url: null }, agentOptions) {
@@ -24,10 +24,10 @@ function resend(url, id, auth, options = { id: null, callback_url: null }, agent
     })
     .then((response) => {
       const res = JSON.parse(response);
-      if (!res.success) return reject(errorHandler(res.message));
+      if (!res.success) return Promise.reject(errorHandler(res.message));
       return resolve(res);
     })
-    .catch((err) => reject(err));
+    .catch((err) => Promise.reject(err));
 }
 
 function testDelete(url, id, auth, agentOptions) {
@@ -37,10 +37,10 @@ function testDelete(url, id, auth, agentOptions) {
     })
     .then((response) => {
       const res = JSON.parse(response);
-      if (!res.success) return reject(errorHandler(res.message));
+      if (!res.success) return Promise.reject(errorHandler(res.message));
       return resolve(res);
     })
-    .catch((err) => reject(err));
+    .catch((err) => Promise.reject(err));
 }
 
 function getInfo(url, id, auth, agentOptions) {
@@ -50,17 +50,17 @@ function getInfo(url, id, auth, agentOptions) {
     })
     .then((response) => {
       const res = JSON.parse(response);
-      if (!res.success) return reject(errorHandler(res.message));
+      if (!res.success) return Promise.reject(errorHandler(res.message));
       return resolve(res);
     })
-    .catch((err) => reject(err));
+    .catch((err) => Promise.reject(err));
 }
 
 function getFile(url, id, auth, options = { id: null, thumbnail: null }, agentOptions) {
   const thumbnail = options.thumbnail === undefined ? null : options.thumbnail;
 
   if (!['s', 'l', null].includes(thumbnail)) {
-    return reject(new Error('ThumbnailSizeInvalid: Must be \'s\', \'l\', or null (default) for full file.'));
+    return Promise.reject(new Error('ThumbnailSizeInvalid: Must be \'s\', \'l\', or null (default) for full file.'));
   }
 
   return request
@@ -70,7 +70,7 @@ function getFile(url, id, auth, options = { id: null, thumbnail: null }, agentOp
       thumbnail: thumbnail
     })
     .then((response) => resolve(response))
-    .catch((err) => reject(err));
+    .catch((err) => Promise.reject(err));
 }
 
 function deleteFile(url, id, auth, agentOptions) {
@@ -80,10 +80,10 @@ function deleteFile(url, id, auth, agentOptions) {
     })
     .then((response) => {
       const res = JSON.parse(response);
-      if (!res.success) return reject(errorHandler(res.message));
+      if (!res.success) return Promise.reject(errorHandler(res.message));
       return resolve(res);
     })
-    .catch((err) => reject(err));
+    .catch((err) => Promise.reject(err));
 }
 
 module.exports = {
