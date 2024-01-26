@@ -1,4 +1,4 @@
-const request = require('request-promise-native');
+const request = require('axios');
 const errorHandler = require('../error-handler');
 
 module.exports = class {
@@ -8,23 +8,19 @@ module.exports = class {
     this.url = url;
     this.agentOptions = agentOptions;
 
-    this.auth = { user: this.apiKey, pass: this.apiSecret };
+    this.auth = { username: this.apiKey, password: this.apiSecret };
   }
 
   status() {
-    return new Promise((resolve, reject) => {
-      request({
-        method: 'GET',
-        url: `${this.url}/account/status`,
-        auth: this.auth,
-        agentOptions: this.agentOptions,
+    return request
+      .get(`${this.url}/account/status`, {
+        auth: this.auth
       })
-        .then((response) => {
-          const res = JSON.parse(response);
-          if (!res.success) return reject(errorHandler(res.message));
-          return resolve(res);
-        })
-        .catch((err) => reject(err));
-    });
+      .then((response) => {
+        const tempResponse = response;
+        if (!response.data.success) return Promise.reject(errorHandler(response.data.message));
+        return Promise.resolve(response.data);
+      })
+      .catch((err) => Promise.reject(err));
   }
 };

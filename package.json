@@ -1,6 +1,6 @@
 {
   "name": "phaxio-official",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "The official Node.JS library for Phaxio API v2.1.0. https://phaxio.com",
   "main": "index.js",
   "scripts": {
@@ -14,8 +14,8 @@
   "author": "Jeremy Jackson <jeremy.jackson@voyant.com> (https://voyant.com)",
   "license": "MIT",
   "dependencies": {
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.8"
+    "axios": "^1.6.5",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
@@ -23,6 +23,6 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "expect.js": "^0.3.1",
-    "mocha": "^6.2.2"
+    "mocha": "^10.2.0"
   }
 }
