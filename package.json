@@ -2,6 +2,7 @@
   "name": "phaxio-official",
   "version": "1.2.3",
   "description": "The official Node.JS library for Phaxio API v2.1.0. https://phaxio.com",
+  "repository": "github:phaxio/phaxio-node",
   "main": "index.js",
   "scripts": {
     "test": "mocha --exit --recursive --no-colors"
